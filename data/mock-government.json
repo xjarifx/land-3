@@ -1,0 +1,45 @@
+{
+  "plots": [
+    {
+      "dagNo": "D-1042",
+      "khatianNo": "K-7781",
+      "district": "Dhaka",
+      "upazila": "Savar",
+      "deedNo": "DEED-2021-00491",
+      "registryOffice": "Savar Sub-Registry Office",
+      "deedRegisteredAt": "2021-04-18",
+      "mutationStatus": "COMPLETED",
+      "taxRecords": [{ "receiptNo": "LDT-2025-DHK-1042", "taxYear": "2025-2026", "status": "VERIFIED", "reviewedAt": "2026-01-10T10:30:00Z" }],
+      "currentOwnerNid": "1987654321098",
+      "currentOwnerName": "Md. Rahman",
+      "status": "CLEAR",
+      "courtCases": [],
+      "ownershipHistory": [
+        { "ownerName": "Md. Rahman", "nid": "1987654321098", "from": "2021-08-02", "source": "AC Land Mutation Record" },
+        { "ownerName": "Md. Karim", "nid": "1970000000000", "from": "2012-03-14", "source": "Sub-Registry Deed DEED-2021-00491" }
+      ],
+      "deeds": [
+        { "deedNo": "DEED-2021-00491", "executedAt": "2021-04-18", "mutationRecordedAt": "2021-08-02", "sellerNid": "1970000000000", "buyerNid": "1987654321098" }
+      ],
+      "activeIntents": []
+    },
+    {
+      "dagNo": "D-2189",
+      "khatianNo": "K-1103",
+      "district": "Chattogram",
+      "upazila": "Patiya",
+      "deedNo": "DEED-2019-01912",
+      "registryOffice": "Patiya Sub-Registry Office",
+      "deedRegisteredAt": "2019-10-01",
+      "mutationStatus": "UNDER_MUTATION",
+      "taxRecords": [{ "receiptNo": "LDT-2026-CTG-2189", "taxYear": "2025-2026", "status": "PENDING", "reviewedAt": null }],
+      "currentOwnerNid": "1990123456789",
+      "currentOwnerName": "Ms. Nasrin Akter",
+      "status": "REVIEW",
+      "courtCases": [{ "caseNo": "CIV-2025-103", "court": "Chattogram Joint District Judge Court", "status": "Pending" }],
+      "ownershipHistory": [{ "ownerName": "Ms. Nasrin Akter", "nid": "1990123456789", "from": "2019-11-22", "source": "AC Land Mutation Record" }],
+      "deeds": [{ "deedNo": "DEED-2019-01912", "executedAt": "2019-10-01", "mutationRecordedAt": null, "sellerNid": "1981000000000", "buyerNid": "1990123456789" }],
+      "activeIntents": [{ "noticeId": "INTENT-DEMO-01", "status": "PENDING", "createdAt": "2026-10-12T09:00:00Z", "vetoDeadline": "2026-10-13T09:00:00Z" }]
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CITIZEN
+  LAND_OWNER
+  REGISTRAR
+  ADMIN
+}
+
+enum LandStatus {
+  CLEAR
+  REVIEW
+  DISPUTED
+  BLOCKED
+}
+
+enum NoticeStatus {
+  PENDING
+  SELLER_CONFIRMED
+  BUYER_CONFIRMED
+  APPROVED
+  VETOED
+  EXPIRED
+}
+
+model User {
+  id              String                 @id @default(cuid())
+  nid             String                 @unique
+  mobile          String
+  name            String
+  role            UserRole               @default(CITIZEN)
+  createdAt       DateTime               @default(now())
+  ownedPlots      LandPlot[]             @relation("CurrentOwner")
+  sellerNotices   PendingTransferNotice[] @relation("Seller")
+  buyerNotices    PendingTransferNotice[] @relation("Buyer")
+  taxReviews      TaxReceipt[]           @relation("TaxReviewer")
+}
+
+model TaxReceipt {
+  id          String   @id @default(cuid())
+  receiptNo   String   @unique
+  landPlotId  String
+  taxYear     String
+  status      String   @default("PENDING")
+  documentUrl String?
+  reviewerId  String?
+  reviewedAt  DateTime?
+  reviewReason String?
+  auditHash   String?
+  landPlot    LandPlot @relation(fields: [landPlotId], references: [id])
+  reviewer    User?    @relation("TaxReviewer", fields: [reviewerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([landPlotId, status])
+}
+
+model LandPlot {
+  id              String                 @id @default(cuid())
+  dagNo           String
+  khatianNo       String
+  district        String
+  upazila         String
+  currentOwnerNid String
+  status          LandStatus             @default(CLEAR)
+  currentOwner    User                   @relation("CurrentOwner", fields: [currentOwnerNid], references: [nid])
+  deeds           DeedRecord[]
+  notices         PendingTransferNotice[]
+  taxReceipts     TaxReceipt[]
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  @@unique([district, upazila, dagNo, khatianNo])
+  @@index([dagNo, khatianNo])
+}
+
+model DeedRecord {
+  id            String   @id @default(cuid())
+  deedNo        String   @unique
+  landPlotId    String
+  registryOffice String
+  sellerNid     String
+  buyerNid      String
+  executedAt    DateTime
+  mutationSyncedAt DateTime?
+  landPlot      LandPlot @relation(fields: [landPlotId], references: [id])
+  createdAt     DateTime @default(now())
+  @@index([landPlotId, executedAt])
+}
+
+model PendingTransferNotice {
+  id                String       @id @default(cuid())
+  landPlotId        String
+  buyerNid          String
+  sellerNid         String
+  buyerMobile       String
+  sellerMobile      String
+  status            NoticeStatus @default(PENDING)
+  buyerConfirmedAt  DateTime?
+  sellerConfirmedAt DateTime?
+  vetoDeadline      DateTime
+  auditHash         String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  landPlot          LandPlot     @relation(fields: [landPlotId], references: [id])
+  buyer             User         @relation("Buyer", fields: [buyerNid], references: [nid])
+  seller            User         @relation("Seller", fields: [sellerNid], references: [nid])
+  @@index([landPlotId, status])
+  @@index([vetoDeadline])
+}

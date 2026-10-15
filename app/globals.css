@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { background: #f5f7f6; color: #17352c; }
+body { margin: 0; font-family: Arial, "Noto Sans Bengali", sans-serif; }
+button, input { font: inherit; }
+.gov-stripe { background: linear-gradient(90deg, #006a4e 0 48%, #f42a41 48% 52%, #006a4e 52%); height: 4px; }
