@@ -1,0 +1,163 @@
+"use client";
+
+import { createContext, useContext, useEffect, useState } from "react";
+
+export type Language = "en" | "bn";
+
+const translations = {
+  en: {
+    brandTagline: "Land verification & early warning service",
+    home: "Home",
+    verify: "Verify land",
+    transfers: "Transfer safety",
+    admin: "Admin",
+    language: "Language",
+    english: "English",
+    bangla: "বাংলা",
+    demoBadge: "Land record confidence, made clear",
+    heroTitle: "Check land records before you buy",
+    heroText: "LandGuard BD brings deed, mutation, tax, and public notice signals together so you can spot risk before making a decision.",
+    startVerification: "Start verification",
+    exploreScenarios: "Try demo scenarios",
+    clearTitle: "Clear record",
+    pendingTitle: "Pending mutation",
+    disputeTitle: "Dispute flag",
+    clearText: "Deed and mutation are synchronized.",
+    pendingText: "See how an incomplete mutation is highlighted.",
+    disputeText: "Review a record with a court case and notice.",
+    footer: "Dummy structured data only. Not an official government record.",
+    citizen: "Citizen service",
+    verification: "Land & tax verification",
+    verificationText: "Search by deed, tax receipt, Dag, or Khatian number. Personal names, NIDs, mobile numbers, and tax amounts are never displayed.",
+    searchType: "Search type",
+    number: "Number",
+    search: "Search record",
+    searching: "Searching...",
+    demoHint: "Choose a scenario below to fill the form and view its result instantly.",
+    demoScenarios: "Demo scenarios",
+    useScenario: "Try scenario",
+    clearScenario: "Clear & synchronized",
+    reviewScenario: "Mutation in progress",
+    disputeScenario: "Court case & notice",
+    taxScenario: "Tax review pending",
+    risk: "Double-purchase risk warning",
+    riskTitle: "This parcel has an active sale or mutation risk",
+    district: "District",
+    upazila: "Upazila",
+    dagKhatian: "Dag / Khatian",
+    publicOwnership: "Public ownership view",
+    verifiedOwner: "Verified owner record",
+    registeredDeed: "Registered deed",
+    deedNumber: "Deed number",
+    registrationDate: "Registration date",
+    registryOffice: "Registry office",
+    mutationStatus: "Mutation status",
+    landTax: "Land development tax",
+    receiptYear: "Receipt / year",
+    verificationStatus: "Verification",
+    notices: "Active public notices",
+    disputes: "Court / dispute flags",
+    none: "None",
+    noNotice: "No active notice",
+    noCase: "No pending case in dataset",
+    privacy: "Privacy note: this public result intentionally excludes personal identity and financial details.",
+    adminTitle: "Land development tax review",
+    adminText: "Review uploaded tax receipt metadata and publish only a verification status.",
+    approve: "Approve",
+    reject: "Reject",
+    transferTitle: "Intent to purchase / pending review",
+    transferText: "A transfer notice is approved only after both buyer and registered seller confirm with NID/OTP.",
+    buyer: "Buyer initiates notice",
+    otp: "Both parties confirm OTP",
+    audit: "Audit hash is recorded"
+  },
+  bn: {
+    brandTagline: "ভূমি যাচাই ও সতর্কতা সেবা",
+    home: "হোম",
+    verify: "জমি যাচাই",
+    transfers: "হস্তান্তর নিরাপত্তা",
+    admin: "অ্যাডমিন",
+    language: "ভাষা",
+    english: "English",
+    bangla: "বাংলা",
+    demoBadge: "সহজে ভূমি রেকর্ডের নির্ভরযোগ্যতা বুঝুন",
+    heroTitle: "কেনার আগে জমির তথ্য যাচাই করুন",
+    heroText: "দলিল, নামজারি, কর এবং প্রকাশ্য নোটিশের তথ্য একসাথে দেখে LandGuard BD আপনাকে ঝুঁকি বুঝতে সাহায্য করে।",
+    startVerification: "যাচাই শুরু করুন",
+    exploreScenarios: "ডেমো দেখুন",
+    clearTitle: "পরিষ্কার রেকর্ড",
+    pendingTitle: "নামজারি অপেক্ষমাণ",
+    disputeTitle: "বিরোধের সংকেত",
+    clearText: "দলিল ও নামজারি তথ্য সামঞ্জস্যপূর্ণ।",
+    pendingText: "অসম্পূর্ণ নামজারি কীভাবে দেখানো হয় দেখুন।",
+    disputeText: "মামলা ও নোটিশ থাকা রেকর্ড পর্যালোচনা করুন।",
+    footer: "শুধু ডেমোর কাঠামোবদ্ধ তথ্য। এটি সরকারি রেকর্ড নয়।",
+    citizen: "নাগরিক সেবা",
+    verification: "ভূমি ও কর যাচাই",
+    verificationText: "দলিল, কর রসিদ, দাগ বা খতিয়ান নম্বর দিয়ে খুঁজুন। ব্যক্তির নাম, এনআইডি, মোবাইল ও করের পরিমাণ দেখানো হয় না।",
+    searchType: "অনুসন্ধানের ধরন",
+    number: "নম্বর",
+    search: "রেকর্ড খুঁজুন",
+    searching: "খোঁজা হচ্ছে...",
+    demoHint: "নিচের একটি ডেমো বেছে নিলে ফর্ম পূরণ হয়ে ফলাফল সঙ্গে সঙ্গে দেখাবে।",
+    demoScenarios: "ডেমো পরিস্থিতি",
+    useScenario: "পরিস্থিতি দেখুন",
+    clearScenario: "পরিষ্কার ও সামঞ্জস্যপূর্ণ",
+    reviewScenario: "নামজারি চলছে",
+    disputeScenario: "মামলা ও নোটিশ",
+    taxScenario: "কর যাচাই অপেক্ষমাণ",
+    risk: "দ্বৈত ক্রয়ের ঝুঁকি সতর্কতা",
+    riskTitle: "এই জমিতে বিক্রয় বা নামজারি সংক্রান্ত ঝুঁকি আছে",
+    district: "জেলা",
+    upazila: "উপজেলা",
+    dagKhatian: "দাগ / খতিয়ান",
+    publicOwnership: "প্রকাশ্য মালিকানা তথ্য",
+    verifiedOwner: "মালিকানা যাচাই হয়েছে",
+    registeredDeed: "নিবন্ধিত দলিল",
+    deedNumber: "দলিল নম্বর",
+    registrationDate: "নিবন্ধনের তারিখ",
+    registryOffice: "রেজিস্ট্রি অফিস",
+    mutationStatus: "নামজারি অবস্থা",
+    landTax: "ভূমি উন্নয়ন কর",
+    receiptYear: "রসিদ / বছর",
+    verificationStatus: "যাচাই",
+    notices: "সক্রিয় প্রকাশ্য নোটিশ",
+    disputes: "মামলা / বিরোধের সংকেত",
+    none: "কোনোটিই নেই",
+    noNotice: "কোনো সক্রিয় নোটিশ নেই",
+    noCase: "ডেটাসেটে কোনো চলমান মামলা নেই",
+    privacy: "গোপনীয়তা: এই ফলাফলে ব্যক্তিগত পরিচয় ও আর্থিক তথ্য ইচ্ছাকৃতভাবে বাদ রাখা হয়েছে।",
+    adminTitle: "ভূমি উন্নয়ন কর পর্যালোচনা",
+    adminText: "কর রসিদের তথ্য যাচাই করে শুধু যাচাইয়ের অবস্থা প্রকাশ করুন।",
+    approve: "অনুমোদন",
+    reject: "বাতিল",
+    transferTitle: "ক্রয়ের ইচ্ছা / অপেক্ষমাণ পর্যালোচনা",
+    transferText: "ক্রেতা ও নিবন্ধিত বিক্রেতা এনআইডি/ওটিপি দিয়ে নিশ্চিত করার পরই হস্তান্তর অনুমোদিত হয়।",
+    buyer: "ক্রেতা নোটিশ শুরু করেন",
+    otp: "উভয় পক্ষ ওটিপি নিশ্চিত করেন",
+    audit: "অডিট হ্যাশ সংরক্ষিত হয়"
+  }
+} as const;
+
+type TranslationKey = keyof typeof translations.en;
+type LanguageContextValue = { language: Language; setLanguage: (language: Language) => void; t: (key: TranslationKey) => string };
+const LanguageContext = createContext<LanguageContextValue | null>(null);
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [language, setLanguage] = useState<Language>("en");
+  useEffect(() => {
+    const saved = window.localStorage.getItem("landguard-language");
+    if (saved === "bn" || saved === "en") setLanguage(saved);
+  }, []);
+  useEffect(() => {
+    window.localStorage.setItem("landguard-language", language);
+    document.documentElement.lang = language;
+  }, [language]);
+  return <LanguageContext.Provider value={{ language, setLanguage, t: (key) => translations[language][key] }}>{children}</LanguageContext.Provider>;
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (!context) throw new Error("useLanguage must be used inside LanguageProvider");
+  return context;
+}

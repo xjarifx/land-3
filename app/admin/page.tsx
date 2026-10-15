@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/components/language";
 
 type Review = {
   receiptNo: string; dagNo: string; khatianNo: string; district: string; taxYear: string;
@@ -9,6 +10,7 @@ type Review = {
 };
 
 export default function AdminPage() {
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [error, setError] = useState("");
   const [reason, setReason] = useState<Record<string, string>>({});
@@ -37,8 +39,8 @@ export default function AdminPage() {
   return <section className="mx-auto max-w-6xl px-6 py-10">
     <div className="border-b-4 border-gov-green bg-white px-6 py-7 shadow-sm">
       <p className="text-sm font-semibold text-gov-green">প্রশাসনিক প্যানেল / Admin Mode</p>
-      <h1 className="mt-2 text-3xl font-bold text-gov-dark">Land Development Tax Review</h1>
-      <p className="mt-2 max-w-3xl text-slate-600">Review uploaded tax receipt metadata and publish only a verification status. This demo does not expose owner identity or tax amount.</p>
+      <h1 className="mt-2 text-3xl font-black text-gov-dark">{t("adminTitle")}</h1>
+      <p className="mt-2 max-w-3xl text-slate-600">{t("adminText")}</p>
     </div>
     {error && <p className="mt-6 rounded border border-red-300 bg-red-50 p-4 text-red-800">{error}</p>}
     <div className="mt-8 overflow-x-auto rounded bg-white shadow-sm">
@@ -51,7 +53,7 @@ export default function AdminPage() {
           <td className="px-5 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${review.status === "PENDING" ? "bg-amber-100 text-amber-900" : review.status === "VERIFIED" ? "bg-emerald-100 text-emerald-900" : "bg-red-100 text-red-900"}`}>{review.status}</span>{review.reviewedAt && <span className="mt-2 block text-xs text-slate-500">{new Date(review.reviewedAt).toLocaleString("en-BD")}</span>}</td>
           <td className="px-5 py-4">
             <textarea value={reason[review.receiptNo] ?? ""} onChange={(event) => setReason((current) => ({ ...current, [review.receiptNo]: event.target.value }))} placeholder="Reason required for rejection" className="mb-2 block w-full rounded border border-slate-300 px-3 py-2 text-xs" rows={2} />
-            <div className="flex gap-2"><button onClick={() => decide(review.receiptNo, "VERIFIED")} className="rounded bg-gov-green px-3 py-2 text-xs font-bold text-white">Approve</button><button onClick={() => decide(review.receiptNo, "REJECTED")} className="rounded bg-gov-red px-3 py-2 text-xs font-bold text-white">Reject</button></div>
+            <div className="flex gap-2"><button onClick={() => decide(review.receiptNo, "VERIFIED")} className="rounded bg-gov-green px-3 py-2 text-xs font-bold text-white">{t("approve")}</button><button onClick={() => decide(review.receiptNo, "REJECTED")} className="rounded bg-gov-red px-3 py-2 text-xs font-bold text-white">{t("reject")}</button></div>
           </td>
         </tr>)}</tbody>
       </table>

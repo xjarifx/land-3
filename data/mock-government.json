@@ -40,6 +40,42 @@
       "ownershipHistory": [{ "ownerName": "Ms. Nasrin Akter", "nid": "1990123456789", "from": "2019-11-22", "source": "AC Land Mutation Record" }],
       "deeds": [{ "deedNo": "DEED-2019-01912", "executedAt": "2019-10-01", "mutationRecordedAt": null, "sellerNid": "1981000000000", "buyerNid": "1990123456789" }],
       "activeIntents": [{ "noticeId": "INTENT-DEMO-01", "status": "PENDING", "createdAt": "2026-10-12T09:00:00Z", "vetoDeadline": "2026-10-13T09:00:00Z" }]
+    },
+    {
+      "dagNo": "D-3307",
+      "khatianNo": "K-4420",
+      "district": "Rajshahi",
+      "upazila": "Paba",
+      "deedNo": "DEED-2024-00881",
+      "registryOffice": "Paba Sub-Registry Office",
+      "deedRegisteredAt": "2024-06-11",
+      "mutationStatus": "COMPLETED",
+      "taxRecords": [{ "receiptNo": "LDT-2026-SYL-3307", "taxYear": "2025-2026", "status": "PENDING", "reviewedAt": null }],
+      "currentOwnerNid": "1995123456780",
+      "currentOwnerName": "Demo Owner 3",
+      "status": "REVIEW",
+      "courtCases": [{ "caseNo": "CIV-2026-044", "court": "Rajshahi Joint District Judge Court", "status": "Pending" }],
+      "ownershipHistory": [{ "ownerName": "Demo Owner 3", "nid": "1995123456780", "from": "2024-08-20", "source": "AC Land Mutation Record" }],
+      "deeds": [{ "deedNo": "DEED-2024-00881", "executedAt": "2024-06-11", "mutationRecordedAt": "2024-08-20", "sellerNid": "1985000000000", "buyerNid": "1995123456780" }],
+      "activeIntents": []
+    },
+    {
+      "dagNo": "D-4451",
+      "khatianNo": "K-9022",
+      "district": "Sylhet",
+      "upazila": "Golapganj",
+      "deedNo": "DEED-2023-00217",
+      "registryOffice": "Golapganj Sub-Registry Office",
+      "deedRegisteredAt": "2023-02-09",
+      "mutationStatus": "COMPLETED",
+      "taxRecords": [{ "receiptNo": "LDT-2026-SYL-4451", "taxYear": "2025-2026", "status": "VERIFIED", "reviewedAt": "2026-02-03T08:00:00Z" }],
+      "currentOwnerNid": "1988123456701",
+      "currentOwnerName": "Demo Owner 4",
+      "status": "CLEAR",
+      "courtCases": [],
+      "ownershipHistory": [{ "ownerName": "Demo Owner 4", "nid": "1988123456701", "from": "2023-05-15", "source": "AC Land Mutation Record" }],
+      "deeds": [{ "deedNo": "DEED-2023-00217", "executedAt": "2023-02-09", "mutationRecordedAt": "2023-05-15", "sellerNid": "1979000000000", "buyerNid": "1988123456701" }],
+      "activeIntents": []
     }
   ]
 }

@@ -1,3 +1,8 @@
+"use client";
+
+import { useLanguage } from "@/components/language";
+
 export default function TransfersPage() {
-  return <section className="mx-auto max-w-4xl px-6 py-16"><div className="rounded border-t-4 border-gov-red bg-white p-8 shadow-sm"><h1 className="text-3xl font-bold text-gov-dark">Intent to Purchase / Pending Review</h1><p className="mt-4 leading-7 text-slate-600">A transfer notice becomes approved only after both buyer and registered seller confirm with NID/OTP. Until then, the registered owner receives a 24-hour veto window to block an unauthorized request.</p><div className="mt-6 grid gap-4 md:grid-cols-3"><div><strong className="block text-gov-green">01</strong><span className="text-sm">Buyer initiates notice</span></div><div><strong className="block text-gov-green">02</strong><span className="text-sm">Both parties confirm OTP</span></div><div><strong className="block text-gov-green">03</strong><span className="text-sm">Audit hash is recorded</span></div></div></div></section>;
+  const { t } = useLanguage();
+  return <section className="mx-auto max-w-4xl px-6 py-16"><div className="rounded-2xl border-t-4 border-gov-red bg-white p-8 shadow-sm"><h1 className="text-3xl font-black text-gov-dark">{t("transferTitle")}</h1><p className="mt-4 leading-7 text-slate-600">{t("transferText")}</p><div className="mt-8 grid gap-4 md:grid-cols-3">{[t("buyer"), t("otp"), t("audit")].map((item, index) => <div key={item} className="rounded-xl bg-slate-50 p-4"><strong className="block text-2xl text-gov-green">0{index + 1}</strong><span className="text-sm">{item}</span></div>)}</div></div></section>;
 }
