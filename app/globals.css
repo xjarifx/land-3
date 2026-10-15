@@ -6,3 +6,5 @@
 body { margin: 0; font-family: Arial, "Noto Sans Bengali", sans-serif; }
 button, input { font: inherit; }
 .gov-stripe { background: linear-gradient(90deg, #006a4e 0 48%, #f42a41 48% 52%, #006a4e 52%); height: 4px; }
+.soft-grid { background-image: linear-gradient(rgba(0, 106, 78, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 106, 78, .04) 1px, transparent 1px); background-size: 28px 28px; }
+.status-dot { box-shadow: 0 0 0 5px rgba(16, 185, 129, .12); }

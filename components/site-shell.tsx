@@ -17,8 +17,8 @@ function Shell({ children }: { children: React.ReactNode }) {
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gov-green text-lg font-black text-white shadow-lg shadow-emerald-900/20">LG</span>
           <span><strong className="block text-lg tracking-tight">LandGuard BD</strong><small className="text-xs text-slate-500">{t("brandTagline")}</small></span>
         </Link>
-        <nav className="hidden items-center gap-5 text-sm font-semibold text-gov-green md:flex">
-          <Link href="/">{t("home")}</Link><Link href="/verify">{t("verify")}</Link><Link href="/transfers">{t("transfers")}</Link><Link href="/admin">{t("admin")}</Link>
+        <nav className="hidden items-center gap-2 text-sm font-semibold md:flex">
+          <Link href="/" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("home")}</Link><Link href="/verify" className="rounded-lg bg-emerald-50 px-3 py-2 text-gov-green">{t("verify")}</Link><Link href="/transfers" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("transfers")}</Link><Link href="/admin" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("admin")}</Link>
         </nav>
         <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 p-1 text-xs font-bold">
           <span className="sr-only">{t("language")}</span>
