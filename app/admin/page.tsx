@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [reason, setReason] = useState<Record<string, string>>({});
 
   async function load() {
-    const response = await fetch("/api/admin/tax");
+    const response = await fetch("/api/admin/tax", { headers: { "x-demo-admin-key": "landguard-demo-admin" } });
     const data = await response.json();
     if (response.ok) setReviews(data.reviews);
     else setError(data.error ?? "Could not load tax reviews.");
@@ -28,7 +28,7 @@ export default function AdminPage() {
     setError("");
     const response = await fetch("/api/admin/tax", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "x-demo-admin-key": "landguard-demo-admin" },
       body: JSON.stringify({ receiptNo, status, reason: reason[receiptNo] })
     });
     const data = await response.json();

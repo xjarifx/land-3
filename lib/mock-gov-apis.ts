@@ -24,7 +24,12 @@ export function getDataSyncHealthScore(plot: MockPlot): { score: number; label: 
 export function getLandHealthReport(dagNo: string, khatianNo: string) {
   const plot = findLandPlot(dagNo, khatianNo);
   if (!plot) return null;
-  const demoIntents = getDemoIntents(plot.dagNo, plot.khatianNo);
+  const activeIntents = plot.activeIntents.filter((intent) =>
+    intent.status !== "VETOED" && (intent.status === "APPROVED" || new Date(intent.vetoDeadline).getTime() >= Date.now())
+  );
+  const demoIntents = getDemoIntents(plot.dagNo, plot.khatianNo).filter((intent) =>
+    intent.status !== "VETOED" && (intent.status === "APPROVED" || new Date(intent.vetoDeadline).getTime() >= Date.now())
+  );
   const reviewedTaxes = listTaxReviews().filter((review) => review.dagNo === plot.dagNo);
   return {
     parcel: { dagNo: plot.dagNo, khatianNo: plot.khatianNo, district: plot.district, upazila: plot.upazila },
@@ -35,9 +40,11 @@ export function getLandHealthReport(dagNo: string, khatianNo: string) {
       const review = reviewedTaxes.find((item) => item.receiptNo === receiptNo);
       return { receiptNo, taxYear, status: review?.status ?? status };
     }),
-    activeIntents: demoIntents.length ? demoIntents : plot.activeIntents,
+    activeIntents: demoIntents.length ? demoIntents : activeIntents,
     doublePurchaseRisk: plot.mutationStatus === "UNDER_MUTATION" || plot.activeIntents.some((intent) => intent.status === "PENDING"),
     courtCases: plot.courtCases.map(({ caseNo, court, status }) => ({ caseNo, court, status })),
+    ownershipHistory: plot.ownershipHistory.map(({ ownerName, from, source }) => ({ ownerName, from, source })),
+    khasOrAcquisitionStatus: "No synthetic khas or acquisition flag",
     syncHealth: getDataSyncHealthScore(plot),
     generatedAt: new Date().toISOString()
   };

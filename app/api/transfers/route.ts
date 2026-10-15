@@ -23,6 +23,10 @@ export async function POST(request: NextRequest) {
   if (input.action === "create") {
     const plot = await prisma.landPlot.findUnique({ where: { id: input.landPlotId } });
     if (!plot || plot.currentOwnerNid !== input.sellerNid) return NextResponse.json({ error: "Seller is not the registered current owner." }, { status: 403 });
+    const existing = await prisma.pendingTransferNotice.findFirst({
+      where: { landPlotId: plot.id, status: { in: ["PENDING", "BUYER_CONFIRMED", "SELLER_CONFIRMED"] } }
+    });
+    if (existing) return NextResponse.json({ error: "An active transfer notice already exists for this parcel.", noticeId: existing.id }, { status: 409 });
     const vetoDeadline = new Date(Date.now() + Number(process.env.VETO_WINDOW_HOURS ?? 24) * 60 * 60 * 1000);
     const notice = await prisma.pendingTransferNotice.create({
       data: {
@@ -40,6 +44,8 @@ export async function POST(request: NextRequest) {
   if (!notice) return NextResponse.json({ error: "No active transfer notice found." }, { status: 404 });
   if (input.action === "veto") {
     if (new Date() > notice.vetoDeadline) return NextResponse.json({ error: "The veto window has expired." }, { status: 409 });
+    const valid = await verifyOtp(`transfer:${notice.id}:${input.actor}`, input.otp);
+    if (!valid) return NextResponse.json({ error: "OTP is invalid or expired." }, { status: 401 });
     const updated = await prisma.pendingTransferNotice.update({ where: { id: notice.id }, data: { status: "VETOED", auditHash: createAuditHash({ noticeId: notice.id, event: "VETOED", timestamp: new Date().toISOString() }) } });
     return NextResponse.json({ noticeId: updated.id, status: updated.status });
   }

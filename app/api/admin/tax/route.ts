@@ -8,11 +8,17 @@ const schema = z.object({
   reason: z.string().max(500).optional()
 });
 
-export async function GET() {
+function isDemoAdmin(request: NextRequest) {
+  return request.headers.get("x-demo-admin-key") === (process.env.DEMO_ADMIN_KEY ?? "landguard-demo-admin");
+}
+
+export async function GET(request: NextRequest) {
+  if (!isDemoAdmin(request)) return NextResponse.json({ error: "Admin authentication is required." }, { status: 401 });
   return NextResponse.json({ reviews: listTaxReviews() });
 }
 
 export async function POST(request: NextRequest) {
+  if (!isDemoAdmin(request)) return NextResponse.json({ error: "Admin authentication is required." }, { status: 401 });
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Receipt number and a valid review status are required." }, { status: 400 });
   if (parsed.data.status === "REJECTED" && !parsed.data.reason?.trim()) {
