@@ -41,7 +41,7 @@ export function getLandHealthReport(dagNo: string, khatianNo: string) {
       return { receiptNo, taxYear, status: review?.status ?? status };
     }),
     activeIntents: demoIntents.length ? demoIntents : activeIntents,
-    doublePurchaseRisk: plot.mutationStatus === "UNDER_MUTATION" || plot.activeIntents.some((intent) => intent.status === "PENDING"),
+    doublePurchaseRisk: plot.mutationStatus === "UNDER_MUTATION" || demoIntents.length > 0 || activeIntents.length > 0,
     courtCases: plot.courtCases.map(({ caseNo, court, status }) => ({ caseNo, court, status })),
     ownershipHistory: plot.ownershipHistory.map(({ from, source }) => ({ from, source })),
     khasOrAcquisitionStatus: "No synthetic khas or acquisition flag",

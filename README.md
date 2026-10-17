@@ -1,22 +1,23 @@
 # LandGuard BD
 
-LandGuard BD is a synthetic-data prototype for the **LandTech 2026 Digital Land
-Records, Verification & Digitization** track. It combines public verification
-signals before a land purchase and a two-party transfer-intent workflow that
-helps detect mutation lag, court flags, active notices, and double-selling risk.
+LandGuard BD is a synthetic-data prototype for a Bangladesh-focused,
+one-stop land paperwork verification platform. It helps a buyer check whether
+a parcel's deed is recorded, mutation or khatian paperwork is still updating,
+tax paperwork is reviewed, and another sale-related process is active before
+they pay or purchase.
 
 ## Chosen problem statements
 
-- **P3 — Fraud & Double-Selling Detection:** flag incomplete mutation, active
-  notices, and court/dispute signals before a second sale.
-- **P5 — Citizen Pre-Purchase Verification:** let a citizen search by deed,
-  tax receipt, Dag, or Khatian without exposing personal identity or financial
-  details.
+- **P3 — Fraud & Double-Selling Detection:** warn when land is already sold or
+  sale-related paperwork is still ongoing.
+- **P5 — Citizen Pre-Purchase Verification:** provide one source-by-source
+  view of deed, mutation, khatian, tax, and notice signals without exposing
+  personal identity or financial details.
 
 ## Demo features
 
 1. Search the four synthetic parcels from `/verify`.
-2. Compare a clear parcel with mutation, court, and notice-risk scenarios.
+2. Compare a clear parcel with an already-sold / paperwork-update-risk scenario.
 3. Create a purchase intent from `/transfers`.
 4. Confirm buyer and seller separately with the demo OTP `123456`.
 5. Veto an active intent with OTP and view the SHA-256 audit hash.
