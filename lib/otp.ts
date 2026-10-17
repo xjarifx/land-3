@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import { randomInt } from "node:crypto";
 
 const redis = new Redis(process.env.REDIS_URL ?? "redis://localhost:6379", {
   lazyConnect: true,
@@ -6,12 +7,13 @@ const redis = new Redis(process.env.REDIS_URL ?? "redis://localhost:6379", {
 });
 
 export async function issueOtp(subject: string): Promise<string> {
-  const otp = process.env.NODE_ENV === "production" ? `${Math.floor(100000 + Math.random() * 900000)}` : "123456";
+  const otp = process.env.NODE_ENV === "production" ? `${randomInt(100000, 1000000)}` : "123456";
   try {
     await redis.connect().catch(() => undefined);
     await redis.set(`otp:${subject}`, otp, "EX", Number(process.env.OTP_TTL_SECONDS ?? 300));
-  } catch {
-    console.warn("OTP Redis unavailable; use a configured Redis service before production.");
+  } catch (error) {
+    console.error("OTP could not be stored in Redis.", error);
+    throw new Error("OTP service unavailable.");
   }
   return otp;
 }
@@ -24,8 +26,8 @@ export async function verifyOtp(subject: string, otp: string): Promise<boolean> 
       await redis.del(`otp:${subject}`);
       return expected === otp;
     }
-  } catch {
-    console.warn("OTP Redis unavailable during verification.");
+  } catch (error) {
+    console.error("OTP verification could not reach Redis.", error);
   }
-  return process.env.NODE_ENV !== "production" && otp === "123456";
+  return false;
 }

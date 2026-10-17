@@ -25,6 +25,10 @@ helps detect mutation lag, court flags, active notices, and double-selling risk.
 The transfer page intentionally uses the in-memory synthetic demo store so the
 live presentation works without a database seed. The production-shaped Prisma
 API remains available at `/api/transfers` for the persistence-backed workflow.
+The persistence API requires the `x-transfer-api-key` header matching
+`TRANSFER_API_KEY`; it is intended for an authenticated backend integration,
+not direct browser use. The admin demo route requires `DEMO_ADMIN_KEY` and
+fails closed in production if the default demo credential is used.
 
 ## Local setup
 
@@ -40,6 +44,10 @@ npm run dev
 ```
 
 Open <http://localhost:3000>.
+
+For the local demo, the admin page uses the development-only
+`landguard-demo-admin` fallback. The synthetic demo transfer API is disabled
+when `NODE_ENV=production`.
 
 For Docker:
 

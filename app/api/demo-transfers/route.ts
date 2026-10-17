@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { confirmDemoIntent, createDemoIntent, getDemoIntents, vetoDemoIntent } from "@/lib/demo-transfers";
 import { findLandPlot } from "@/lib/mock-gov-apis";
 
+const requestSchema = z.object({
+  action: z.enum(["create", "confirm", "veto"]),
+  dagNo: z.string().min(1),
+  khatianNo: z.string().min(1),
+  noticeId: z.string().min(1).optional(),
+  actor: z.enum(["buyer", "seller"]).optional(),
+  otp: z.string().regex(/^\d{6}$/).optional()
+});
+
 export async function POST(request: NextRequest) {
-  const body = await request.json().catch(() => null) as {
-    action?: "create" | "confirm" | "veto";
-    dagNo?: string;
-    khatianNo?: string;
-    noticeId?: string;
-    actor?: "buyer" | "seller";
-    otp?: string;
-  } | null;
-  if (!body?.dagNo || !body.khatianNo || !body.action) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "The synthetic demo workflow is disabled in production." }, { status: 404 });
+  }
+  const parsed = requestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
     return NextResponse.json({ error: "Dag No, Khatian No, and action are required." }, { status: 400 });
   }
+  const body = parsed.data;
   if (!findLandPlot(body.dagNo, body.khatianNo)) {
     return NextResponse.json({ error: "No matching dummy land record was found." }, { status: 404 });
   }

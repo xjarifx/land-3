@@ -53,6 +53,7 @@ export function confirmDemoIntent(dagNo: string, khatianNo: string, noticeId: st
   const key = `${dagNo.trim().toUpperCase()}:${khatianNo.trim().toUpperCase()}`;
   const intent = (intents.get(key) ?? []).find((candidate) => candidate.noticeId === noticeId);
   if (!intent || !["PENDING", "BUYER_CONFIRMED", "SELLER_CONFIRMED"].includes(intent.status)) return null;
+  if (new Date(intent.vetoDeadline).getTime() < Date.now()) return null;
   const now = new Date().toISOString();
   if (actor === "buyer") intent.buyerConfirmedAt = intent.buyerConfirmedAt ?? now;
   else intent.sellerConfirmedAt = intent.sellerConfirmedAt ?? now;

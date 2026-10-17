@@ -9,7 +9,9 @@ const schema = z.object({
 });
 
 function isDemoAdmin(request: NextRequest) {
-  return request.headers.get("x-demo-admin-key") === (process.env.DEMO_ADMIN_KEY ?? "landguard-demo-admin");
+  const configuredKey = process.env.DEMO_ADMIN_KEY ?? (process.env.NODE_ENV === "production" ? undefined : "landguard-demo-admin");
+  if (!configuredKey || (process.env.NODE_ENV === "production" && configuredKey === "landguard-demo-admin")) return false;
+  return request.headers.get("x-demo-admin-key") === configuredKey;
 }
 
 export async function GET(request: NextRequest) {

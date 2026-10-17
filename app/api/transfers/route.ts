@@ -15,8 +15,16 @@ const requestSchema = z.object({
   actor: z.enum(["buyer", "seller"]).optional()
 });
 
+function isAuthorizedService(request: NextRequest) {
+  const apiKey = process.env.TRANSFER_API_KEY;
+  return Boolean(apiKey) && request.headers.get("x-transfer-api-key") === apiKey;
+}
+
 export async function POST(request: NextRequest) {
-  const parsed = requestSchema.safeParse(await request.json());
+  if (!isAuthorizedService(request)) {
+    return NextResponse.json({ error: "Transfer API authentication is required." }, { status: 401 });
+  }
+  const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid transfer request.", details: parsed.error.flatten() }, { status: 400 });
   const input = parsed.data;
 
@@ -35,7 +43,14 @@ export async function POST(request: NextRequest) {
         auditHash: createAuditHash({ plotId: plot.id, buyerNid: input.buyerNid, sellerNid: input.sellerNid, createdAt: new Date().toISOString() })
       }
     });
-    const [buyerOtp, sellerOtp] = await Promise.all([issueOtp(`transfer:${notice.id}:buyer`), issueOtp(`transfer:${notice.id}:seller`)]);
+    let buyerOtp: string;
+    let sellerOtp: string;
+    try {
+      [buyerOtp, sellerOtp] = await Promise.all([issueOtp(`transfer:${notice.id}:buyer`), issueOtp(`transfer:${notice.id}:seller`)]);
+    } catch {
+      await prisma.pendingTransferNotice.update({ where: { id: notice.id }, data: { status: "EXPIRED" } });
+      return NextResponse.json({ error: "The OTP service is unavailable." }, { status: 503 });
+    }
     return NextResponse.json({ noticeId: notice.id, status: notice.status, vetoDeadline, message: "Both parties must confirm with OTP. Demo OTPs are returned only outside production.", demoOtps: process.env.NODE_ENV === "production" ? undefined : { buyerOtp, sellerOtp } }, { status: 201 });
   }
 
