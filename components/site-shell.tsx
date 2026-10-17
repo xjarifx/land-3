@@ -20,7 +20,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           <span><strong className="block text-base tracking-tight sm:text-lg">LandGuard BD</strong><small className="hidden text-xs text-slate-500 sm:block">{t("brandTagline")}</small></span>
         </Link>
         <nav className="hidden items-center gap-2 text-sm font-semibold md:flex">
-          <Link href="/" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("home")}</Link><Link href="/verify" className="rounded-lg bg-emerald-50 px-3 py-2 text-gov-green">{t("verify")}</Link><Link href="/transfers" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("transfers")}</Link><Link href="/admin" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("admin")}</Link>
+          <Link href="/" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("home")}</Link><Link href="/verify" className="rounded-lg bg-emerald-50 px-3 py-2 text-gov-green">{t("verify")}</Link>{!isAdmin && <Link href="/transfers" className="rounded-lg px-3 py-2 text-slate-600 hover:bg-emerald-50 hover:text-gov-green">{t("transfers")}</Link>}{isAdmin && <Link href="/admin" className="rounded-lg bg-emerald-50 px-3 py-2 text-gov-green">{t("admin")}</Link>}
         </nav>
         <div className="flex items-center gap-2">
           <div className="role-switch flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1 text-[11px] font-bold sm:text-xs">
@@ -40,8 +40,8 @@ function Shell({ children }: { children: React.ReactNode }) {
     <nav aria-label="Mobile navigation" className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-4 border-t border-slate-200 bg-white/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_24px_rgba(15,23,42,.08)] backdrop-blur md:hidden">
       <Link href="/" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-slate-500"><span className="text-lg">⌂</span>{t("home")}</Link>
       <Link href="/verify" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-gov-green"><span className="text-lg">⌕</span>{t("verify")}</Link>
-      <Link href="/transfers" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-slate-500"><span className="text-lg">⇄</span>{t("transfers")}</Link>
-      <Link href="/admin" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-slate-500"><span className="text-lg">▣</span>{t("admin")}</Link>
+      {!isAdmin && <Link href="/transfers" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-slate-500"><span className="text-lg">⇄</span>{t("transfers")}</Link>}
+      {isAdmin && <Link href="/admin" className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-[10px] font-bold text-gov-green"><span className="text-lg">▣</span>{t("admin")}</Link>}
     </nav>
     <footer className="mt-20 bg-gov-dark py-10 text-center text-sm text-white"><p>LandGuard BD — LandTech 2026 MVP</p><p className="mt-2 text-emerald-100">{t("footer")}</p></footer>
   </div>;

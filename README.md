@@ -18,10 +18,12 @@ they pay or purchase.
 
 1. Search the four synthetic parcels from `/verify`.
 2. Compare a clear parcel with an already-sold / paperwork-update-risk scenario.
-3. Create a purchase intent from `/transfers`.
-4. Confirm buyer and seller separately with the demo OTP `123456`.
-5. Veto an active intent with OTP and view the SHA-256 audit hash.
-6. Review synthetic tax receipt metadata from `/admin`.
+3. In User mode, submit a paperwork review request for a parcel.
+4. Switch to Admin mode to approve or reject pending review requests.
+5. Create a purchase intent from `/transfers`.
+6. Confirm buyer and seller separately with the demo OTP `123456`.
+7. Veto an active intent with OTP and view the SHA-256 audit hash.
+8. Review synthetic tax receipt metadata from `/admin`.
 
 The transfer page intentionally uses the in-memory synthetic demo store so the
 live presentation works without a database seed. The production-shaped Prisma
