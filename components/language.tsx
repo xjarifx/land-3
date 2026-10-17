@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 export type Language = "en" | "bn";
+export type AppMode = "user" | "admin";
 
 const translations = {
   en: {
@@ -12,6 +13,9 @@ const translations = {
     transfers: "Transfer safety",
     admin: "Admin",
     language: "Language",
+    mode: "View",
+    userMode: "User",
+    adminMode: "Admin",
     english: "English",
     bangla: "বাংলা",
     demoBadge: "Land record confidence, made clear",
@@ -80,6 +84,9 @@ const translations = {
     transfers: "হস্তান্তর নিরাপত্তা",
     admin: "অ্যাডমিন",
     language: "ভাষা",
+    mode: "ভিউ",
+    userMode: "ব্যবহারকারী",
+    adminMode: "অ্যাডমিন",
     english: "English",
     bangla: "বাংলা",
     demoBadge: "সহজে ভূমি রেকর্ডের নির্ভরযোগ্যতা বুঝুন",
@@ -146,18 +153,33 @@ const translations = {
 type TranslationKey = keyof typeof translations.en;
 type LanguageContextValue = { language: Language; setLanguage: (language: Language) => void; t: (key: TranslationKey) => string };
 const LanguageContext = createContext<LanguageContextValue | null>(null);
+type AppModeContextValue = { mode: AppMode; setMode: (mode: AppMode) => void };
+const AppModeContext = createContext<AppModeContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
+  const [mode, setMode] = useState<AppMode>("user");
   useEffect(() => {
     const saved = window.localStorage.getItem("landguard-language");
     if (saved === "bn" || saved === "en") setLanguage(saved);
+    const savedMode = window.localStorage.getItem("landguard-mode");
+    if (savedMode === "admin" || savedMode === "user") setMode(savedMode);
   }, []);
   useEffect(() => {
     window.localStorage.setItem("landguard-language", language);
     document.documentElement.lang = language;
   }, [language]);
-  return <LanguageContext.Provider value={{ language, setLanguage, t: (key) => translations[language][key] }}>{children}</LanguageContext.Provider>;
+  useEffect(() => {
+    window.localStorage.setItem("landguard-mode", mode);
+    document.documentElement.dataset.mode = mode;
+  }, [mode]);
+  return <LanguageContext.Provider value={{ language, setLanguage, t: (key) => translations[language][key] }}><AppModeContext.Provider value={{ mode, setMode }}>{children}</AppModeContext.Provider></LanguageContext.Provider>;
+}
+
+export function useAppMode() {
+  const context = useContext(AppModeContext);
+  if (!context) throw new Error("useAppMode must be used inside LanguageProvider");
+  return context;
 }
 
 export function useLanguage() {

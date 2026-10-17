@@ -3,8 +3,27 @@
 @tailwind utilities;
 
 :root { background: #f5f7f6; color: #17352c; }
-body { margin: 0; font-family: Arial, "Noto Sans Bengali", sans-serif; }
+body { margin: 0; overflow-x: hidden; font-family: Arial, "Noto Sans Bengali", sans-serif; }
 button, input { font: inherit; }
 .gov-stripe { background: linear-gradient(90deg, #006a4e 0 48%, #f42a41 48% 52%, #006a4e 52%); height: 4px; }
 .soft-grid { background-image: linear-gradient(rgba(0, 106, 78, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 106, 78, .04) 1px, transparent 1px); background-size: 28px 28px; }
 .status-dot { box-shadow: 0 0 0 5px rgba(16, 185, 129, .12); }
+.app-shell { min-height: 100vh; transition: background-color .2s ease, color .2s ease; }
+.user-theme { background: #f5f7f6; }
+.admin-theme { background: #f4f6fb; }
+.admin-theme .gov-stripe { background: linear-gradient(90deg, #263b73 0 48%, #e3a008 48% 52%, #263b73 52%); }
+.admin-theme .bg-gov-green { background-color: #263b73 !important; }
+.admin-theme .bg-gov-dark { background-color: #172554 !important; }
+.admin-theme .text-gov-green { color: #263b73 !important; }
+.admin-theme .text-gov-dark { color: #172554 !important; }
+.admin-theme .border-gov-green { border-color: #263b73 !important; }
+.admin-theme .hover\:bg-emerald-50:hover { background-color: #eef2ff !important; }
+.admin-theme .hover\:text-gov-green:hover { color: #263b73 !important; }
+.admin-theme .brand-mark { background-color: #263b73 !important; box-shadow: 0 10px 15px -3px rgba(38, 59, 115, .25); }
+.admin-theme .role-switch { border-color: #c7d2fe; background: #eef2ff; }
+.admin-theme .role-switch button[aria-pressed="true"] { background: #263b73; }
+@media (max-width: 639px) {
+  h1 { letter-spacing: -.03em; }
+  input, select, textarea, button { min-height: 44px; }
+  .role-switch button, .role-switch { min-height: 0; }
+}
